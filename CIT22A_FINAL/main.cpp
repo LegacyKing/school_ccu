@@ -1,8 +1,8 @@
 /* 
  * File:   main.cpp
  * Author: Andrew
- *
- * Created on September 15, 2015, 6:37 AM
+ * Final Project for CIT 220A
+ * Created on October 29, 2015, 9:00 AM
  */
 
 
@@ -11,7 +11,11 @@
 #include <string>
 #include <fstream>
 #include <limits>
+
+
 using namespace std;
+
+
 
 // Declarations
 int userPromptStatus;       // Value that is written to file, and prompts the three statuses
@@ -23,8 +27,9 @@ ofstream myfile;            // method to write to file
 string finished = "n";
 int f = 0;
 
-
-
+string userName;
+string userAddress;
+string userPhone;
 /*
  * Main Program
  */
@@ -32,16 +37,30 @@ int f = 0;
 int main() 
 {
     // create file "concern.txt" to write values to.
-   // NOTE! In Windows you must run this program as an ADMINISTRATOR, or else the file cannot be created.
-        myfile.open("C:\\concern.txt");
+   
+     myfile.open("concern.txt");
    
     
     // Display message to user to get first prompt. We assume the user will enter a value of 1, 2 or 3.
     // No steps taken to ensure a valid value is used. Any invalid input simply moves to the exit routine.
     cout << "Welcome to the Bible verses review and personal introspection tool.\n";
-    while ( f == 0 )
+    
+    cout << "Please enter your name: " << endl;  // Ask for the Name
+    // cin.ignore();                                   
+	getline( cin, userName );
+    cout << "Please enter your address: " << endl;  // Ask for the address
+    /// cin.ignore();                                   
+	getline( cin, userAddress );  
+    cout << "Please enter your phone: " << endl;  // Ask for the phone number
+        /// cin.ignore();                                   
+        getline( cin, userPhone );  
+        cout << endl;
+            
+            
+    while ( f == 0 )    // This will loop through bibleVerses, until the user enters anything other than "0"
     {
         bibleVerses();  // launch the bibleVerses module as long as f is "0"
+       
     }
     
     // Close the file, as we no longer need it. Proper procedure to make sure value is saved.
@@ -78,6 +97,7 @@ int bibleVerses()
     cout << "3 = emergency\n";
     cin >> userPromptStatus;
     detailFunction();
+    myfile << endl;
     // method to keep screen open for option 1 to get screen shot.
     if (userPromptStatus == 1)
     {
@@ -85,19 +105,13 @@ int bibleVerses()
         while (temp != '\n')
         cin.get(temp);
     }
-    // Display message if the UserPromptStatus was 2 or 3
-    if (userPromptStatus == 2 || userPromptStatus == 3)
-    {
-    cout << "\nArea of concern is:\n";
-    cout << userPromptComment;
-    cout << endl;
-    }
+
     // Keep console open for reading and allow for a screen shot. 
     // cin.get was not a viable option this time, unlike HelloWorld.
     // This solution was found after online research. 
    
     // whether to continue with another Bible verse.
-     cout << "\nfinished reviewing Bible verses? (y/n):\n";
+     cout << "\nFinished reviewing Bible verses? (y/n):\n";
      cin >> finished;
      if (finished == "y")
      {
@@ -110,7 +124,7 @@ int detailFunction()
 {
    string resume = "n";
    myfile << userPromptStatus << "\t";  // We take the user input for the status and drop it in the file here and add a TAB space.
-
+   
    if (userPromptStatus == 2)
    {
         while (resume == "n")
@@ -118,7 +132,7 @@ int detailFunction()
         cout << "Please indicate area of concern:\n";
         cin.ignore();                                   // This is a online researched solution
 	getline( cin, userPromptComment );  
-        myfile << userPromptComment << "\t";    // take the comment and append a TAB space.
+        myfile << userPromptComment << "\t";    // take the comment and append a TAB space. This is crucial to avoiding a java exception.
        
         cout << "Finished with concerns? (y/n)\n";  // continue loop?
         cin >> resume;
@@ -126,6 +140,7 @@ int detailFunction()
    }
    if (userPromptStatus == 3)
    {
+       myfile << "Name: " << userName << "; Address: " << userAddress << "; Phone: " << userPhone << "\t";  // Required we include contact information
         while (resume == "n"){
         cout << "Please indicate what needs immediate attention:\n";
         cin.ignore();
@@ -134,7 +149,10 @@ int detailFunction()
         cout << "Finished with concerns? (y/n)\n";  // continue loop?
         cin >> resume;
         }
+        
    } 
+   
+   
    
 }
 
